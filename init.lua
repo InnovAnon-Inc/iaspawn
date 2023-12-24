@@ -9,6 +9,7 @@ iaspawn = { }
 local spawn_ship = dofile(MODPATH .. "newspawn.lua")
 dofile(MODPATH .. "dead.lua")
 dofile(MODPATH .. "mem.lua")
+--dofile(MODPATH .. "items.lua")
 local utils = dofile(MODPATH .. "utils.lua")
 
 local function is_alive(saved_data)
@@ -38,7 +39,7 @@ function iaspawn.register_soul(objref, mother, father)
       return false
    end
  
-   return true -- TODO testing
+   if false then -- TODO testing
 
 
    if minetest.is_player(objref) then end
@@ -65,7 +66,8 @@ function iaspawn.register_soul(objref, mother, father)
    end
    assert(type(iaspawn.souls[player_name].entity) ~= "userdata")
    assert(     iaspawn.souls[player_name].player  == nil)
-   
+  
+   end
    return true
 end
 
@@ -161,15 +163,41 @@ minetest.register_on_joinplayer(function(player)
 
 	local spawn_no = meta:get_int("spawn_no")
 	if spawn_no ~= nil and spawn_no > 0 then -- not the first time joining
-
-        	local saved_data = iaspawn.souls[name]
-        	if not iaspawn.is_alive(saved_data) then -- the standin died while the player was away
-			meta:set_int("dead", 1)
-                	minetest.kick_player(name, "You died on a hardcore server.")
-			return
+		local spawn_pos = meta:get_string("spawn_at") -- respawn in same position (eg fairy jar)
+		local spawn_random = meta:get_int("spawn_random") -- respawn in same position (eg fairy jar)
+		if spawn_pos ~= nil then
+			spawn_pos = minetest.deserialize(spawn_pos)
 		end
+		if spawn_pos ~= nil and spawn_pos ~= "" then
+			--if spawn_pos == "random" then
+			--	local x = math.random(-31000, 31000)
+			--	local y = math.random(  0000,  2000) -- spawn on planet
+			--	local z = math.random(-31000, 31000)
 
-	    	iaspawn.replace_standin_with_player(player, saved_data)
+			--	spawn_pos = {x=x, y=y, z=z} --vector:new(x, y, z)
+			--end
+			player:set_pos(spawn_pos)
+		elseif spawn_random ~= nil and spawn_random > 0 then
+			local x = math.random(-31000, 31000)
+			local y = math.random(  0000,  2000) -- spawn on planet
+			local z = math.random(-31000, 31000)
+
+			spawn_pos = {x=x, y=y, z=z} --vector:new(x, y, z)
+			player:set_pos(spawn_pos)
+		else
+			if false then -- TODO testing
+        		local saved_data = iaspawn.souls[name]
+        		if not iaspawn.is_alive(saved_data) then -- the standin died while the player was away
+				meta:set_int("dead", 1)
+               	 	minetest.kick_player(name, "You died on a hardcore server.")
+				return
+			end
+
+	    		iaspawn.replace_standin_with_player(player, saved_data)
+			end
+		end
+		meta:set_string("spawn_at", "")
+
 		return
 	end
 
@@ -187,7 +215,28 @@ end)
 
 
 
+--scroll named DUAM XNAHT
+--local opt = math.random(1,2)
+--local msg
+--if opt == 1 and player_name ~= "Maud" then -- TODO match case
+--  msg = "Who was that Maud person anyway?"
+--elseif opt == 2 and player_name ~= "Maud" then
+--  msg = "Thinking of Maud you forget everything else"
+--elseif player_name == "Maud then
+--  msg = "As your mind turns inward on itself, you forget everything else."
+--elseif hallucinating then
+--  msg = "Your mind releases itself from mundane concerns."
+--end
+--minetest.chat_send_player(player_name, msg)
+--player_meta:set_int("spawn_no", 0)
+--player:set_hp(-100)
+--player_meta:set_int("dead", 1) -- TODO
 
+-- TODO mobs won't attack when player stands on a node inscribed with Elbereth
+
+-- TODO special names Croesus, Kroisos, Creosote
+-- TODO special names Maud
+-- TODO special names wizard
 
 
 

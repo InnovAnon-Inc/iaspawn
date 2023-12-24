@@ -4,6 +4,10 @@ local MODMEM  = minetest.get_mod_storage()
 local S       = minetest.get_translator(MODPATH)
 local schem   = MODPATH.."/schematics/spawn_ship.mts"
 
+-- TODO midas effect (player named midas is gonna have a great time till he tries to eat)
+-- TODO captain (player named "captain" spawns on a raft)
+-- TODO aladin (player spawns on a carpet; it does not fly)
+
 local function boom(np, r, intensity)
 	assert(np        ~= nil)
 	assert(r         ~= nil)
