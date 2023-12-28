@@ -116,15 +116,15 @@ local function spawn_ship(objref)
 	local pos  = nil
 	local ymin, ymax
 	if minetest.get_modpath("multidimensions") then
-		ymin = 2000
-		ymax = 4000
+		ymin = 1000
+		ymax = 2000
 	else
 		ymin = 200
 		ymax = 1000
 	end
 	while pos == nil do -- find a place where the ship can be spawned
 		local x = math.random(-31000, 31000)
-		local y = math.random(  2000,  4000) -- spawn in low orbit
+		local y = math.random(  ymin,  ymax) -- spawn in low orbit
 		local z = math.random(-31000, 31000)
 
 		pos = {x=x, y=y, z=z} --vector:new(x, y, z)
