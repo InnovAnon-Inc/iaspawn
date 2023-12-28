@@ -116,10 +116,10 @@ local function spawn_ship(objref)
 	local pos  = nil
 	local ymin, ymax
 	if minetest.get_modpath("multidimensions") then
-		ymin = 1000
-		ymax = 2000
+		ymin =  200 -- TODO
+		ymax = 1000
 	else
-		ymin = 200
+		ymin =  200
 		ymax = 1000
 	end
 	while pos == nil do -- find a place where the ship can be spawned
